@@ -84,7 +84,13 @@ class AlgoritmoGenetico():
     def melhor_individuo(self, individuo):
         if individuo.nota_avaliacao > self.melhor_solucao.nota_avaliacao:
             self.melhor_solucao = individuo
-        
+   
+    def soma_avaliacoes(self):
+        soma = 0
+        for individuo in self.populacao:
+            soma += individuo.nota_avaliacao
+        return soma
+   
 if __name__ == '__main__':
     lista_produtos = []
     lista_produtos.append(Produto("Geladeira Dako", 0.751 , 999.90))
@@ -127,9 +133,11 @@ if __name__ == '__main__':
     
     ag.melhor_individuo(ag.populacao[0])
     
+    soma = ag.soma_avaliacoes()
+    
     print("Melhor solução para o problema: %s\n" % ag.melhor_solucao.cromossomo,
           "Nota = %s\n" % ag.melhor_solucao.nota_avaliacao)
-    
+    print("Soma das avaliações: %s" % soma)
 # =============================================================================
 #     for i in range(ag.tamanho_populacao):
 #         print("*** Indivíduo %s ***\n" % str(i+1),
