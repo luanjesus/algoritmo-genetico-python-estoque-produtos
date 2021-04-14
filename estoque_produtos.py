@@ -6,6 +6,7 @@ This is a temporary script file.
 """
 
 from random import random
+import matplotlib.pyplot as plt
 
 class Produto():
     def __init__(self, nome, espaco, valor):
@@ -70,6 +71,7 @@ class AlgoritmoGenetico():
         self.populacao = []
         self.geracao = 0
         self.melhor_solucao = 0
+        self.lista_solucoes = []
         
     def inicializa_populacao(self, espacos, valores, limite_espacos):
         for i in range(self.tamanho_populacao):
@@ -116,6 +118,8 @@ class AlgoritmoGenetico():
             individuo.avaliacao()
             
         self.ordena_populacao()
+        self.melhor_solucao = self.populacao[0]
+        self.lista_solucoes.append(self.melhor_solucao.nota_avaliacao)
         
         self.visualiza_geracao()
         
@@ -142,6 +146,7 @@ class AlgoritmoGenetico():
             self.visualiza_geracao()
             
             melhor = self.populacao[0]
+            self.lista_solucoes.append(melhor.nota_avaliacao)
             self.melhor_individuo(melhor)
         
         print("\nMelhor solução -> G: %s Valor: %s Espaço: %s Cromossomo: %s" % (self.melhor_solucao.geracao,
@@ -188,3 +193,10 @@ if __name__ == '__main__':
         if resultado[i] == '1':
             print("Nome: %s R$ %s " % (lista_produtos[i].nome,
                                        lista_produtos[i].valor))
+        
+    plt.plot(ag.lista_solucoes)
+    plt.title("Acompanhamento dos Valoeres")
+    plt.show()
+    
+    
+    
