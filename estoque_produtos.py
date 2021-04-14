@@ -90,7 +90,20 @@ class AlgoritmoGenetico():
         for individuo in self.populacao:
             soma += individuo.nota_avaliacao
         return soma
-   
+    
+    def seleciona_pai(self, soma_avaliacao):
+        pai = -1
+        valor_sorteado = random() * soma_avaliacao
+        soma = 0
+        i = 0
+        while i < len(self.populacao) and soma < valor_sorteado:
+            soma += self.populacao[i].nota_avaliacao
+            pai += 1
+            i += 1
+        return pai
+        
+        
+        
 if __name__ == '__main__':
     lista_produtos = []
     lista_produtos.append(Produto("Geladeira Dako", 0.751 , 999.90))
@@ -127,17 +140,36 @@ if __name__ == '__main__':
     ag.inicializa_populacao(espacos, valores, limite)
     
     for individuo in ag.populacao:
-        individuo.avaliacao()
-        
-    ag.ordena_populacao()
-    
-    ag.melhor_individuo(ag.populacao[0])
-    
+        individuo.avaliacao()        
+    ag.ordena_populacao()    
+    ag.melhor_individuo(ag.populacao[0])    
     soma = ag.soma_avaliacoes()
     
-    print("Melhor solução para o problema: %s\n" % ag.melhor_solucao.cromossomo,
-          "Nota = %s\n" % ag.melhor_solucao.nota_avaliacao)
-    print("Soma das avaliações: %s" % soma)
+    nova_populacao = []
+    probabilidade_mutacao = 0.01
+    for individuos_gerados in range(0, ag.tamanho_populacao, 2):
+        pai1 = ag.seleciona_pai(soma)
+        pai2 = ag.seleciona_pai(soma)
+        
+        filhos = ag.populacao[pai1].crossover(ag.populacao[pai2])
+        nova_populacao.append(filhos[0].mutacao(probabilidade_mutacao))
+        nova_populacao.append(filhos[1].mutacao(probabilidade_mutacao))
+        
+    ag.populacao = list(nova_populacao)
+    for individuo in ag.populacao:
+        individuo.avaliacao()    
+    ag.ordena_populacao()    
+    ag.melhor_individuo(ag.populacao[0])    
+    soma = ag.soma_avaliacoes()  
+    
+    print("Melhor: %s" % ag.melhor_solucao.cromossomo, "Valor: %s\n" % ag.melhor_solucao.nota_avaliacao)
+        
+    
+# =============================================================================
+#     print("Melhor solução para o problema: %s\n" % ag.melhor_solucao.cromossomo,
+#           "Nota = %s\n" % ag.melhor_solucao.nota_avaliacao)
+#     print("Soma das avaliações: %s" % soma)
+# =============================================================================
 # =============================================================================
 #     for i in range(ag.tamanho_populacao):
 #         print("*** Indivíduo %s ***\n" % str(i+1),
