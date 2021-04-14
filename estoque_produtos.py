@@ -56,20 +56,27 @@ class Individuo():
         return filhos
     
     def mutacao(self, taxa_mutacao):
-        print("Taxa %s" % taxa_mutacao)
-        print("Antes  %s" % self.cromossomo)
         for i in range(len(self.cromossomo)):
             if random() < taxa_mutacao:
                 if self.cromossomo[i] == '1':
                     self.cromossomo[i] = '0'
-                    print("Mudou de 1 para 0")
                 else:
                     self.cromossomo[i] = '1'
-                    print("Mudou de 0 para 1")
-        print("Depois %s" % self.cromossomo)
         return self
 
-               
+class AlgoritmoGenetico():
+    def __init__(self, tamanho_populacao):
+        self.tamanho_populacao = tamanho_populacao
+        self.populacao = []
+        self.geracao = 0
+        self.melhor_solucao = 0
+        
+    def inicializa_populacao(self, espacos, valores, limite_espacos):
+        for i in range(self.tamanho_populacao):
+            self.populacao.append(Individuo(espacos, valores, limite_espacos))
+        self.melhor_solucao = self.populacao[0]
+        
+        
 if __name__ == '__main__':
     lista_produtos = []
     lista_produtos.append(Produto("Geladeira Dako", 0.751 , 999.90))
@@ -99,34 +106,12 @@ if __name__ == '__main__':
         nomes.append(produto.nome)
     limite = 3
     
-    individuo1 = Individuo(espacos, valores, limite)
-    #print("Espaços = %s" % str(individuo1.espacos))
-    #print("Valores = %s" % str(individuo1.valores))
-    #print("Cromosso = %s" % str(individuo1.cromossomo))
-    
-    print("\nIndividuo 1")
-    print("Cromosso = %s" % str(individuo1.cromossomo))
-    for i in range(len(lista_produtos)):
-        if individuo1.cromossomo[i] == '1':
-            print("Nome: %s R$ %s " % (lista_produtos[i].nome, lista_produtos[i].valor))
-    
-    individuo1.avaliacao()
-    print("Nota = %s" % individuo1.nota_avaliacao)
-    print("Espaço usado = %s" % individuo1.espaco_usado)
-    
-    individuo2 = Individuo(espacos, valores, limite)
-    print("\nIndividuo 2")
-    print("Cromosso = %s" % str(individuo2.cromossomo))
-    for i in range(len(lista_produtos)):
-        if individuo2.cromossomo[i] == '1':
-            print("Nome: %s R$ %s " % (lista_produtos[i].nome, lista_produtos[i].valor))
-    
-    individuo2.avaliacao()
-    print("Nota = %s" % individuo2.nota_avaliacao)
-    print("Espaço usado = %s" % individuo2.espaco_usado)
-    
-    individuo1.crossover(individuo2)
-    
-    individuo1.mutacao(0.2)
-    #individuo2.mutacao(0.05)
+    tamanho_populacao = 20
+    ag = AlgoritmoGenetico(tamanho_populacao)
+    ag.inicializa_populacao(espacos, valores, limite)
+    for i in range(ag.tamanho_populacao):
+        print("*** Indivíduo %s ***\n" % i,
+              "Espaços = %s\n" % str(ag.populacao[i].espacos),
+              "Valores = %s\n" % str(ag.populacao[i].valores),
+              "Cromossomo = %s\n" % str(ag.populacao[i].cromossomo))
     
