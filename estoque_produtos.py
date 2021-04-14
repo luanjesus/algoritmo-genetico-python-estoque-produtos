@@ -54,6 +54,20 @@ class Individuo():
         filhos[1].cromossomo = filho2
         
         return filhos
+    
+    def mutacao(self, taxa_mutacao):
+        print("Taxa %s" % taxa_mutacao)
+        print("Antes  %s" % self.cromossomo)
+        for i in range(len(self.cromossomo)):
+            if random() < taxa_mutacao:
+                if self.cromossomo[i] == '1':
+                    self.cromossomo[i] = '0'
+                    print("Mudou de 1 para 0")
+                else:
+                    self.cromossomo[i] = '1'
+                    print("Mudou de 0 para 1")
+        print("Depois %s" % self.cromossomo)
+        return self
 
                
 if __name__ == '__main__':
@@ -112,4 +126,7 @@ if __name__ == '__main__':
     print("Espaço usado = %s" % individuo2.espaco_usado)
     
     individuo1.crossover(individuo2)
+    
+    individuo1.mutacao(0.2)
+    #individuo2.mutacao(0.05)
     
